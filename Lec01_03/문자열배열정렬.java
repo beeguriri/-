@@ -31,7 +31,7 @@ public static void main(String[] args) {
     // file 입출력 + String 처리 + 정렬 코딩
     String s = new String(bytes);
 //    System.out.println("s = " + s);
-    String [] sa = s.split(" |\n");	// 블랭크 또는 줄바꿈 기준 스플릿 (regular expression)
+    String [] sa = s.split(" |//\n");	// 블랭크 또는 줄바꿈 기준 스플릿 (regular expression)
 
     System.out.println("\n====split 결과====");
 //    for(int i = 0; i < sa.length; i++) {
