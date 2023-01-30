@@ -20,6 +20,11 @@ class Fruit implements Comparable<Fruit> {
         this.price = price;
     }
 
+    //price를 integer type으로 wrapping
+    public Integer getPrice() {
+    	return this.price;
+    }
+    
     @Override
     public String toString() {
         return "<" + name + ", " + price + ">";
@@ -27,13 +32,16 @@ class Fruit implements Comparable<Fruit> {
 
 	@Override
 	public int compareTo(Fruit o) {
-	//구현할 부분
-		return 0;
+
+		//object 객체의 타입 캐스팅 (fruit 타입으로)
+		Fruit a = (Fruit) o;
+		return getPrice().compareTo(a.getPrice());
 	}
 	
-	public int getPrice() {
-		return price;
-	}
+/*	public int getPrice() {
+		return this.price;
+	}*/
+	
 }
 
 //정렬의 종류
@@ -75,8 +83,8 @@ public class 객체정렬 {
 		        new Fruit("체리", 10)
 		};
 		
-	    System.out.println(arr);
-	    System.out.println("정렬전::");
+//	    System.out.println(arr);
+	    System.out.println("리스트1 정렬 전::");
 	    for (Fruit city : arr)
 	    	System.out.print(" " + city);
 	    
@@ -95,8 +103,8 @@ public class 객체정렬 {
 //	    	}
 		
 		System.out.println();
-	    System.out.println("정렬후::");
-	    for ( Fruit city: arr)
+	    System.out.println("리스트1 정렬 후::");
+	    for (Fruit city: arr)
 	    	System.out.print(" " + city);
 
 	    //배열을 리스트로 만듦
@@ -111,21 +119,23 @@ public class 객체정렬 {
 		lst2.add(new Fruit("블루베리", 500));
 		lst2.add(new Fruit("구지뽕", 300));
 		
-		System.out.println();
-		System.out.println("새로운 리스트2::");
+		System.out.println("\n리스트2 생성::");
 	    for (Fruit city: lst2)
 	    	System.out.print(" " + city);
 	    
 //	    Arrays.sort(lst2);
 	    //lst2는 배열이 아니므로 에러 발생
 	    
+	    //인터페이스 Comparable에 오버라이딩 안해주면 Collections.sort 효과 없음
+	    //오버라이딩 했는데 왜 글자순으로는 정렬을 안해줄까? 
 	    Collections.sort(lst2);
 		System.out.println();
-		System.out.println("새로운 리스트2 정렬::");
+		System.out.println("리스트2 정렬 후::");
 	    for (Fruit city: lst2)
-	    	System.out.print(" " + city);
+	    	System.out.print(" " + city);  
 	    
-	    //이터레이터 사용해서 lst3 (lst1 + lst2)
+	    
+	    //이터레이터 사용해서 lst3(lst1 + lst2) merge 
 	    //lst1, lst2 객체 비교
 	    //스트링이 아니므로 compareTo 사용 못함
 	    ArrayList<Fruit> lst3 = new ArrayList<Fruit>();
@@ -134,40 +144,131 @@ public class 객체정렬 {
 		Iterator<Fruit> iter2 = lst2.iterator();
 		Fruit data1 = iter1.next();
 		Fruit data2 = iter2.next();
-	    	//구현할 부분
+	    
+		//구현할 부분		
+		//lst1과 lst2에 모두 값이 있으면
+		while(iter1.hasNext() && iter2.hasNext()) {
+			
+			if (data1.compareTo(data2)< 0) {
+				lst3.add(data1);
+				data1 = iter1.next();
+			}
+			
+			if (data1.compareTo(data2) > 0) {
+				lst3.add(data2);
+				data2 = iter2.next();
+			}
+			
+			else {				//data1과 data2가 같은 경우
+
+				lst3.add(data1);
+				lst3.add(data2);
+				data1 = iter1.next();
+				data2 = iter2.next();
+			}
+			
+		}
+		
+		//lst1에만 값이 있으면
+		while(iter1.hasNext()) {
+			
+			if (data1.compareTo(data2)> 0) {	//data1이 더 크면
+				lst3.add(data2);				//data2를 먼저 추가하고
+				lst3.add(data1);				//data1을 추가한다
+				do {
+					data1 = iter1.next();		
+					lst3.add(data1);
+				} while(iter1.hasNext());
+				
+			} else if (data1.compareTo(data2)< 0) {	//data1이 더 작으면
+				lst3.add(data1);					//data1을 먼저 추가하고
+				data1 = iter1.next();				//lst1의 다음데이터와 data2를 비교 수행
+				
+				if (iter1.hasNext()) continue;		//lst1에 값이 남아있으면 계속 수행
+				else lst3.add(data2);				//lst1에 값이 없으면 data2를 추가
+
+			} else {								//data1과 data2가 같으면
+				lst3.add(data1);					//data1, data2 추가
+				lst3.add(data2);					
+
+				while (iter1.hasNext()) {			//lst1에 값이 남아있으면
+					data1 = iter1.next();			//다음 data1를 전부
+					lst3.add(data1);				//lst3에 추가
+				}
+			}
+		}
+		
+		//lst2에만 값이 있으면
+		while(iter2.hasNext()) {
+			
+			if (data2.compareTo(data1)> 0) {	//data2이 더 크면
+				lst3.add(data1);				//data1를 먼저 추가하고
+				lst3.add(data2);				//data2을 추가한다
+				do {
+					data2 = iter2.next();		
+					lst3.add(data2);
+				} while(iter2.hasNext());
+				
+			} else if (data2.compareTo(data1)< 0) {	//data2이 더 작으면
+				lst3.add(data2);					//dat2을 먼저 추가하고
+				data2 = iter2.next();				//lst2의 다음데이터와 data1를 비교 수행
+				
+				if (iter2.hasNext()) continue;		//lst2에 값이 남아있으면 계속 수행
+				else lst3.add(data1);				//lst1에 값이 없으면 data1를 추가
+
+			} else {								//data1과 data2가 같으면
+				lst3.add(data1);					//data1, data2 추가
+				lst3.add(data2);					
+
+				while (iter2.hasNext()) {			//lst2에 값이 남아있으면
+					data2 = iter2.next();			//다음 data2를 전부
+					lst3.add(data2);				//lst3에 추가
+				}
+			}
+		}
+
 		System.out.println();
 	    System.out.println("merge:: ");
-	    for ( Fruit city: lst3)
+	    for (Fruit city: lst3)
 	    	System.out.print(city+ " ");
-	    Fruit newFruit = new Fruit("참외", 100);
 	    
+    	System.out.print("\n====================\n");
+
 	    
 	    //binary search
-	    Comparator<Fruit> cc = new Comparator<Fruit>() {	//익명클래스 사용
+	    //Comparator사용 (두 매개변수 비교)
+	    //익명클래스 사용
+	    Fruit newFruit = new Fruit("참외", 100);
+
+	    Comparator<Fruit> cc = new Comparator<Fruit>() {	
 	    	
 	        public int compare(Fruit u1, Fruit u2) {
 	          return u1.compareTo(u2);
 	        }
 	    };
 	    
-	     int res = cc.compare(data1, newFruit);
+	    //??data1이 iter.next()인데 무슨 의미가 있나...?
+	    int res = cc.compare(data1, newFruit);
 	     
-	     if (res > 0)
-	    	 System.out.println("\ndata1 > newFruit\n");
+	    if (res > 0)  	   System.out.println("\ndata1 > newFruit\n");
+	    else if (res < 0)  System.out.println("\ndata1 < newFruit\n");
+	    else 			   System.out.println("\ndata1 = newFruit\n");
 	      /*
 	    System.out.println();
 	    int result = Collections.binarySearch(lst3, newFruit, cc);
 			System.out.println("\nCollections.binarySearch() 조회결과::" + lst3.get(result));
 		*/
 
+		//lst3를 배열로 만듦(binarySearch 사용하려고)
+
 		Fruit [] fa = new Fruit[lst3.size()];
 		
-		//lst3를 배열로 만듦(binarySearch 사용하려고)
 		fa = lst3.toArray(fa);
 		
 	    int result3 = Arrays.binarySearch(fa, newFruit, cc); 
 	    
-		System.out.println("\nArrays.binarySearch() 조회결과::" + lst3.get(result3));
+	    if (result3 < 0) System.out.println("\nArrays.binarySearch() 조회결과:: 없음");
+	    else 	System.out.println("\nArrays.binarySearch() 조회결과::" + fa[result3]);
 		
 		/*
 		int result2 = binSearch(fa, lst3.size(), newFruit);
@@ -178,7 +279,18 @@ public class 객체정렬 {
 		// 교재 109 페이지(실습3-4) 참조하여 구현, 비교연산자 부분을 바꿔줘야 함
 		static int binSearch(Fruit[]a, int n, Fruit f) {
 		//구현할 부분
-			return 0;
+			
+			int pl = 0; //검색범위의 첫 인덱스
+			int pr = n-1; //검색범위의 마지막 인덱스
+			
+			do {
+				int pc = (pl + pr) /2 ;	//중앙 요소의 인덱스
+				if(a[pc] == f)  return pc;		//찾는값이 key값과 같으면 해당 인덱스 반환
+				else if (a[pc].compareTo(f) < 0)  pl = pc + 1;	//검색범위를 뒤쪽으로
+				else pr = pc -1;								//검색범위 앞쪽으로
+			} while (pl <= pr);				//첫 인덱스가 마지막인덱스와 같거나 작을떄까지만 실행
+				
+			return -1;				//검색실패			
 		}
 		
 }
