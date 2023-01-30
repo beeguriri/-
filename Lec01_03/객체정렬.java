@@ -239,6 +239,8 @@ public class 객체정렬 {
 	    //Comparator사용 (두 매개변수 비교)
 	    //익명클래스 사용
 	    Fruit newFruit = new Fruit("참외", 100);
+	    Fruit newFruit2 = new Fruit("딸딸기", 30);
+
 
 	    Comparator<Fruit> cc = new Comparator<Fruit>() {	
 	    	
@@ -248,7 +250,8 @@ public class 객체정렬 {
 	    };
 	    
 	    //??data1이 iter.next()인데 무슨 의미가 있나...?
-	    int res = cc.compare(data1, newFruit);
+	    //newFruit2로 비교하면 나옴!!ㅋㅋ
+	    int res = cc.compare(newFruit2, newFruit);
 	     
 	    if (res > 0)  	   System.out.println("\ndata1 > newFruit\n");
 	    else if (res < 0)  System.out.println("\ndata1 < newFruit\n");
