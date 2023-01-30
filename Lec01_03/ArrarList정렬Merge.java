@@ -26,6 +26,7 @@ public class ArrarList정렬Merge {
 		//자료구조 책 페이지 115 코드 사용한다.
 	}
 	*/
+	
 	public static void main(String[] args) {
 		try {
 			Path input1 = Paths.get("list1.txt");
@@ -141,21 +142,8 @@ public class ArrarList정렬Merge {
 //			System.out.println("세번째 while문: " + list3);
 			System.out.println(list3);
 
-			//list3의 중복제거 (???)
-			Iterator<String> iter3 = list3.iterator();
-			String data3 = iter3.next();
-			
-			while(iter3.hasNext()) {
-				if(data3.compareTo(iter3.next())==0) {
-					list3.remove(data3);
-					data3 = iter3.next();
-				}
-			}
-			System.out.println("중복제거 : " + list3);
-
-
-
-			
+			//list3의 중복제거
+		
 			
 			
 			
