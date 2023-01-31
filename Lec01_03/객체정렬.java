@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 
 //Comparable 인터페이스를 사용하려면 compareTo() method를 구현
@@ -25,6 +26,10 @@ class Fruit implements Comparable<Fruit> {
     	return this.price;
     }
     
+    public String getName() {
+    	return this.name;
+    }
+    
     @Override
     public String toString() {
         return "<" + name + ", " + price + ">";
@@ -33,14 +38,9 @@ class Fruit implements Comparable<Fruit> {
 	@Override
 	public int compareTo(Fruit o) {
 
-		//object 객체의 타입 캐스팅 (fruit 타입으로)
-		Fruit a = (Fruit) o;
-		return getPrice().compareTo(a.getPrice());
+		return getPrice().compareTo(o.getPrice());
+		
 	}
-	
-/*	public int getPrice() {
-		return this.price;
-	}*/
 	
 }
 
@@ -238,24 +238,24 @@ public class 객체정렬 {
 	    //binary search
 	    //Comparator사용 (두 매개변수 비교)
 	    //익명클래스 사용
-	    Fruit newFruit = new Fruit("참외", 100);
-	    Fruit newFruit2 = new Fruit("딸딸기", 30);
+	    Fruit newFruit1 = new Fruit("참외", 100);
+	    Fruit newFruit2 = new Fruit("딸기", 450);
 
-
-	    Comparator<Fruit> cc = new Comparator<Fruit>() {	
+	    //Comparator도 인터페이스임
+	    Comparator<Fruit> cc = new Comparator<Fruit>() {	//익명클래스 선언
 	    	
-	        public int compare(Fruit u1, Fruit u2) {
-	          return u1.compareTo(u2);
+	        public int compare(Fruit u1, Fruit u2) {		//추상메서드 compare의 구현
+	          return u1.compareTo(u2);						//(Fruit에서 구현한 compareTo() 메서드를 호출)
 	        }
 	    };
-	    
+
 	    //??data1이 iter.next()인데 무슨 의미가 있나...?
 	    //newFruit2로 비교하면 나옴!!ㅋㅋ
-	    int res = cc.compare(newFruit2, newFruit);
+	    int res = cc.compare(newFruit1, newFruit2);			//252줄에서 오버라이딩 한 메서드 호출해서 사용!
 	     
-	    if (res > 0)  	   System.out.println("\ndata1 > newFruit\n");
-	    else if (res < 0)  System.out.println("\ndata1 < newFruit\n");
-	    else 			   System.out.println("\ndata1 = newFruit\n");
+	    if (res > 0)  	   System.out.println("\nnewFruit1 > newFruit2\n");
+	    else if (res < 0)  System.out.println("\nnewFruit1 < newFruit2\n");
+	    else 			   System.out.println("\nnewFruit1 = newFruit2\n");
 	      /*
 	    System.out.println();
 	    int result = Collections.binarySearch(lst3, newFruit, cc);
@@ -263,14 +263,22 @@ public class 객체정렬 {
 		*/
 
 		//lst3를 배열로 만듦(binarySearch 사용하려고)
-
+	    System.out.print("comparing, then 사용해보기 ::");
 		Fruit [] fa = new Fruit[lst3.size()];
 		
 		fa = lst3.toArray(fa);
 		
-	    int result3 = Arrays.binarySearch(fa, newFruit, cc); 
+	    List<Fruit> fruitSort = Arrays.asList(fa);
+	    fruitSort.sort(Comparator.comparing(Fruit::getPrice).thenComparing(Fruit::getName));
 	    
-	    if (result3 < 0) System.out.println("\nArrays.binarySearch() 조회결과:: 없음");
+	    for(Fruit city : fruitSort)
+	    	System.out.print(city + " ");
+	    
+		System.out.println();
+		
+	    int result3 = Arrays.binarySearch(fa, newFruit1, cc); 	//cc : comparotor 구현 한 익명클래스
+	    
+	    if (result3 < 0) System.out.println("\nArrays.binarySearch() 조회결과:: 일치하는 데이터 없음");
 	    else 	System.out.println("\nArrays.binarySearch() 조회결과::" + fa[result3]);
 		
 		/*
@@ -278,6 +286,7 @@ public class 객체정렬 {
 		System.out.println("\nbinSearch() 조회결과:" + lst3.get(result2));
 		*/
 		}
+
 	
 		// 교재 109 페이지(실습3-4) 참조하여 구현, 비교연산자 부분을 바꿔줘야 함
 		static int binSearch(Fruit[]a, int n, Fruit f) {
@@ -288,7 +297,7 @@ public class 객체정렬 {
 			
 			do {
 				int pc = (pl + pr) /2 ;	//중앙 요소의 인덱스
-				if(a[pc] == f)  return pc;		//찾는값이 key값과 같으면 해당 인덱스 반환
+				if(a[pc].equals(f))  return pc;					//찾는값이 key값과 같으면 해당 인덱스 반환
 				else if (a[pc].compareTo(f) < 0)  pl = pc + 1;	//검색범위를 뒤쪽으로
 				else pr = pc -1;								//검색범위 앞쪽으로
 			} while (pl <= pr);				//첫 인덱스가 마지막인덱스와 같거나 작을떄까지만 실행
