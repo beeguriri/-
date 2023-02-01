@@ -9,7 +9,7 @@ public class Chap4_Test_CircularQueue {
 
 		System.out.println("**Circular Test**");
 		Scanner stdIn = new Scanner(System.in);
-		CircularQueue s = new CircularQueue(6); // 최대 6 개를 push할 수 있는 큐
+		CircularQueue s = new CircularQueue(4); // 최대 6 개를 push할 수 있는 큐
 		Random random = new Random();
 		
 		int rndx = 0, rndy = 0;
@@ -25,7 +25,7 @@ public class Chap4_Test_CircularQueue {
 
             switch (menu) {
              case 1:                                // 푸쉬
-                System.out.print("데이터: ");
+//                System.out.print("데이터: ");
                 rndx = random.nextInt() % 20;
                 rndy = random.nextInt() % 20;
 				p = new Point(rndx,rndy);
