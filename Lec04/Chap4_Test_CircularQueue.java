@@ -9,7 +9,7 @@ public class Chap4_Test_CircularQueue {
 
 		System.out.println("**Circular Test**");
 		Scanner stdIn = new Scanner(System.in);
-		CircularQueue s = new CircularQueue(4); // 최대 6 개를 push할 수 있는 큐
+		CircularQueue s = new CircularQueue(4); // 최대 4 개를 push할 수 있는 큐
 		Random random = new Random();
 		
 		int rndx = 0, rndy = 0;
@@ -18,7 +18,7 @@ public class Chap4_Test_CircularQueue {
         while (true) {
         	System.out.println("===================="); // 메뉴 구분을 위한 빈 행 추가
 //            System.out.printf("현재 데이터 개수: %d / %d\n", s.size(), s.getCapacity());
-            System.out.print("(1)push　(2)pop　(3)peek　(4)dump　(0)종료: ");
+            System.out.print("(1)push　(2)pop　(3)dump　(0)종료: ");
 
             int menu = stdIn.nextInt();
             if (menu == 0) break;
@@ -47,16 +47,7 @@ public class Chap4_Test_CircularQueue {
                 }
                 break;
 
-/*             case 3:                                // 피크
-                try {
-                     p = s.peek();
-                    System.out.println("피크한 데이터는 " + p + "입니다.");
-                 } catch (CircularQueue.EmptyCircularQueueException e) {
-                    System.out.println("큐가 비어 있습니다.");
-                }
-                break; */
-
-             case 4:                                // 덤프
+             case 3:                                // 덤프
                 s.dump();
                 break;
             }

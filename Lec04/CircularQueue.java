@@ -35,7 +35,7 @@ public class CircularQueue {
         }
     }    
     
-    //--- 원형큐에 데이터를 푸쉬 ---//
+    //--- 원형큐에 데이터를 푸쉬 : rear가 이동 ---//
     public Point push(Point x) throws OverflowCircularQueueException {
     	  	
         if (isFull())						// 큐가 가득 차면 예외처리
@@ -48,32 +48,34 @@ public class CircularQueue {
         	
         		front = 0;
             	//rear 증가 시키고 거기에 값 넣어주기 
+        		//push 함수 첫 호출 시, rear = ( -1 + 1) % 4 = 0
                 rear = (rear+1) % capacity;
-                data[rear] = x;
+                data[rear] = x;				//data[0]에 x 추가, front=0, rear = 0
         	}
         	
         	else {
-            	//rear 증가 시키고 거기에 값 넣어주기 
+            	//데이터가 있는 상태에서 push 함수 호출 시 
+        		//rear 먼저 증가 시키고 거기에 값 넣어주기
+        		//rear = (0+1)%4 = 1
                 rear = (rear+1) % capacity;
-                data[rear] = x;
+                data[rear] = x;				//data[1]에 x 추가, front =0, rear = 1;
         	}
-        	System.out.println("Front의 위치" + front);
-        	System.out.println("Rear의 위치" + rear);  
+        	
+//        	System.out.println("Front의 위치" + front);
+//        	System.out.println("Rear의 위치" + rear);  
             return x;
         }		
     }       
     
-    //--- 원형큐에서 데이터를 팝 ---//
+    //--- 원형큐에서 데이터를 팝 : front가 이동---//
     public Point pop() throws EmptyCircularQueueException {
-    	
-    	Point x = null;
-    	
+    	    	
         if (isEmpty())											// 큐가 비어있으면 예외처리
             throw new EmptyCircularQueueException();            
         
         else {
         	
-        	x = data[front];
+        	Point x = data[front];
         	
         	//큐에 데이터가 하나만 있으면, pop 후 front=rear=-1 (데이터없음 티내기)
         	if(front==rear)  	front = rear = -1;
@@ -81,8 +83,8 @@ public class CircularQueue {
         	//데이터가 여러개 있으면, front의 데이터 pop
         	else 				front = (front+1) % capacity; 
             
-        	System.out.println("Front의 위치" + front);
-        	System.out.println("Rear의 위치" + rear);
+//        	System.out.println("Front의 위치" + front);
+//        	System.out.println("Rear의 위치" + rear);
         	
             return x;
         	
@@ -103,25 +105,43 @@ public class CircularQueue {
     	
     	//데이터 입력만 이루어진 상태에서 발생
     	if(front == 0 && rear==capacity-1) return true;
-    	//데이터가 지워지고, 다시 입력 될때 발생
+    	//데이터가 지워지고, 다시 입력 될때 생길 수 있는 경우
     	else if (front == rear + 1) 	   return true;
     	else   					   		   return false;
 	}
     
     //--- 큐 안의 모든 데이터를 프런트 → 리어 순으로 출력 ---//
-    //?? 큐 데이터 빼다가 다시 가득 채웠을때 dump() 호출하면 데이터가 0개라고 뜬다....?? 
     public void dump() {
         if (isEmpty())
             System.out.println("큐가 비어있습니다.");
-        else {
+       
+        else if(front<=rear) {
         	System.out.printf("*** :: 현재 저장된 데이터 :: %2d개\n", rear-front+1);
             for (int i = front; i <= rear; i++) {
             	System.out.print(data[i] + " ");
             }
+            
             System.out.println();
+        } 
+        
+        //데이터 지워지고, 다시 채워져서 front !=0, rear < front 
+        else {
+        	System.out.printf("*** :: 현재 저장된 데이터 :: %2d개\n", rear-front+1);
+        	
+        	//front에서부터 마지막index까지 출력하고
+            for (int i = front; i <capacity; i++) {
+            	System.out.print(data[i] + " ");
+            }
+            
+            //index 0부터 다시 출력 
+            //(front =2, rear = 0부터 들어있을때, 2부터 끝까지 출력 후 0부터 다시 출력)
 
+            for(int i = 0; i <= rear; i++) {
+            	System.out.print(data[i] + " ");
+            }
+            
+            System.out.println();
+            
         }
     }
-    
-
 }
