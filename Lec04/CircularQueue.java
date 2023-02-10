@@ -4,10 +4,11 @@ package Lec04;
 
 public class CircularQueue {
 	
-    private Point [] data;        // 큐용 배열
+    private Point1 [] data;        // 큐용 배열
     private int capacity;         // 큐의 크기
     private int front;            // 맨 처음 요소 커서
     private int rear;             // 맨 끝 요소 커서
+    private int num;				// 큐 개수 확인용
     
     //--- 실행시 예외: 큐가 비어있음 ---//
     public class EmptyCircularQueueException extends RuntimeException {
@@ -26,23 +27,25 @@ public class CircularQueue {
     	
     	//생성자가 실행되면 초기값 세팅 = 비어있는상태
     	front = rear = -1;
+    	num=0;
         this.capacity = capacity;
         
         try {
-        	data = new Point [capacity];          // 큐 본체용 배열을 생성
+        	data = new Point1 [capacity];          // 큐 본체용 배열을 생성
         } catch (OutOfMemoryError e) {        // 생성할 수 없음
             capacity = 0;
         }
     }    
     
     //--- 원형큐에 데이터를 푸쉬 : rear가 이동 ---//
-    public Point push(Point x) throws OverflowCircularQueueException {
+    public Point1 push(Point1 x) throws OverflowCircularQueueException {
     	  	
         if (isFull())						// 큐가 가득 차면 예외처리
             throw new OverflowCircularQueueException();         
         
         else  {
         	
+        	num++;
         	//큐에 데이터가 없으면, front를 0으로 세팅 -> 데이터 있다고 티내기..
         	if (front == -1)  {		
         	
@@ -68,15 +71,15 @@ public class CircularQueue {
     }       
     
     //--- 원형큐에서 데이터를 팝 : front가 이동---//
-    public Point pop() throws EmptyCircularQueueException {
+    public Point1 pop() throws EmptyCircularQueueException {
     	    	
         if (isEmpty())											// 큐가 비어있으면 예외처리
             throw new EmptyCircularQueueException();            
         
         else {
         	
-        	Point x = data[front];
-        	
+        	Point1 x = data[front];
+        	num--;
         	//큐에 데이터가 하나만 있으면, pop 후 front=rear=-1 (데이터없음 티내기)
         	if(front==rear)  	front = rear = -1;
 
@@ -115,8 +118,9 @@ public class CircularQueue {
         if (isEmpty())
             System.out.println("큐가 비어있습니다.");
        
+        // rear >= front 일때,
         else if(front<=rear) {
-        	System.out.printf("*** :: 현재 저장된 데이터 :: %2d개\n", rear-front+1);
+        	System.out.printf("*** :: 현재 저장된 데이터 :: %2d개\n", num);
             for (int i = front; i <= rear; i++) {
             	System.out.print(data[i] + " ");
             }
@@ -126,7 +130,7 @@ public class CircularQueue {
         
         //데이터 지워지고, 다시 채워져서 front !=0, rear < front 
         else {
-        	System.out.printf("*** :: 현재 저장된 데이터 :: %2d개\n", rear-front+1);
+        	System.out.printf("*** :: 현재 저장된 데이터 :: %2d개\n", num);
         	
         	//front에서부터 마지막index까지 출력하고
             for (int i = front; i <capacity; i++) {
