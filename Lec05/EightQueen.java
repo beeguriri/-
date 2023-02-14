@@ -1,5 +1,7 @@
 package Lec05;
 
+import Lec05.MyStack.EmptyMyStackException;
+
 class MyStack {
 	
     public Point data[];	// 스택용 배열
@@ -121,52 +123,65 @@ public class EightQueen {
 //stack에 Point 객체를 생성하여 push, pop::(x, y, move) => move는 다음 이동 가능 candidate의 column임
 	
 	// 함수 호출로 구현 훈련
-	static void SolveQueen(int [][]d) {
+	static void SolveQueen(int [][]d) throws EmptyMyStackException {
 		
         MyStack s = new MyStack(8) ; //스택 size 8
         Point p = new Point(0,0);    //포인트 초기위치 0,0으로 세팅
-        //int currentPosition = 0;
         
         int ix = p.getX(); //초기행
         int iy = p.getY(); //초기열
         
         int cx = ix;		//현재행
         int cy = iy;		//현재열
-   
+        //System.out.println("현재 위치 (" + cx + ", " + cy + ")"); 
+
         int cnt = 0;	  //정답의 갯수 구하기
         
-        d[ix][iy] = 1; //프로그램 실행 시 (0,0)에 값 일단 넣고 시작함
-        cnt++;
-        s.push(p);		//stack에 point push
+        d[ix][iy] = 1;	//프로그램 실행 시 (0,0)에 값 일단 넣고 시작함
+        s.push(p);		//그때의 위치(0,0) stack에 push
          
-        //행(x)의 값 : p.getX(), 열(y)의 값 : p.getY()
-        //System.out.println("현재 위치 (" + cx + ", " + cy + ")"); 
-        
-        while (true) {
+        //스택에 쌓인 데이터의 갯수가 8개 미만이면 반복실행
+        while (s.size()<8) {
         	
         	//data[0][j]에 데이터 넣기 시작
-        	//정답인 경우 stack에 push
+        	cx++;
+        	cy=0;
         	
-        	if (checkMove(d, cx, cy)) {
-            	nextMove(d, cx, cy);
-            	s.push(p);
-        	}
-        	else cy++;
-        	
-        	
-        	//정답이 없는 경우 pop 
-        	
-        	//stack이 full이 되면 정답이므로 출력 후 stack 비워줌
-        	if(s.getCapacity() == 8) {
+        	//
+        	while (cx <8) {
         		
-        		++cnt;			//정답갯수
-    			System.out.printf("%3d번째 답 : ", cnt);
-        		s.print();
-        		s.clear();
-        		return;
+        		nextMove(d, cx, cy); //열을 이동
         		
+        		while (cy < 8) {
+        			
+        			d[cx][cy] = 1;
+        			Point cp = new Point (cx, cy);
+        			s.push(cp);
+        			break;
+        		}
+        		
+        		if (cy != d.length) break;
+        		else if (cy == d.length) {
+        			p=s.pop();
+        			cx = p.getX();
+        			cy = p.getX();
+        			d[cx][cy] = 0;
+        			cy++;
+        		}
         	}
         }
+        
+    	//stack이 full이 되면 정답이므로 출력 후 stack 비워고, 포인트 이동해서 시작
+    	if(s.size() == 8) {
+    		
+    		++cnt;			//정답갯수
+			System.out.printf("%3d번째 답 : ", cnt);
+    		s.print();
+    		cx++;
+    		cy++;
+    		s.clear();
+    		return;	
+    	}
 
 	}
 		
