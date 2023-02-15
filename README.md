@@ -8,6 +8,10 @@
     + push(data) : rear 증가(rear = (rear+1)%capacity) 후, 그 위치에 data push
     + pop() : data pop 후 front 증가(front = (front+1)%capacity)
     + dump() : front -> rear까지 출력 또는 front -> capacity-1까지 출력 후 0 -> rear 까지 출력
++ 0214 backtracking - recursive / stack (non-recursive)
+  + `8-Queen` problem
+    + Mystack, Point Class 이용 (non-recursive방법으로 구현)
+    + SolveQueen 메서드 작성중
 ------
 자바 자료구조 예제 (\example)
 + 0128 Chapter2 기본자료구조
