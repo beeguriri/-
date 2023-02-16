@@ -35,37 +35,35 @@ public class EightQueen {
         int iy = 0;					//초기열
         int ans = 0;				//정답갯수 카운트
         
-        MyStack s = new MyStack(50) ; //스택 size
+        MyStack s = new MyStack(30) ; //스택 size
         Point p = new Point(ix,iy); //초기포인트
-
-//    	d[ix][iy] = 1;
-//    	s.push(p);
-//    	count++;
-    	
+    	        
         while (count < d.length) {
-        	
+        	        	
         	d[ix][iy] = 1;
+			System.out.println("============");
+
         	System.out.println("첫while문의 ix : "+ ix);
         	System.out.println("첫while문의 iy : "+ iy);
-        	System.out.println("첫while문의 d[ix][iy]" + d[ix][iy]);
+        	System.out.println("첫while문의 d[ix][iy]=" + d[ix][iy]);
 
         	s.push(p);
         	System.out.println("point"+p);
         	count++;
+        	System.out.println("count : "+count);
     		
-        	//0,2에 1을 두고
         	while (ix < d.length) {
 
-        		iy = 0; //0,0부터 확인
+        		int cy = 0;
 
-	    		while (iy < d.length) {
+	    		while (cy < d.length) {
 	    			
-	    			iy = nextMove(d,ix,iy);
+	    			cy = nextMove(d,ix,cy);
 	    			
-	    			if (iy != -1) {
+	    			if (cy != -1) {
 	    				
-	    				Point pc = new Point (ix, iy);
-	    				d[ix][iy] = 1;
+	    				Point pc = new Point (ix, cy);
+	    				d[ix][cy] = 1;
 	    				s.push(pc);
 	    				count++;
 	    				break;
@@ -80,37 +78,39 @@ public class EightQueen {
 						}
 						
 	    				ix = px.getX();
-	    				iy = px.getY();
-	    				d[ix][iy] = 0;
+	    				cy = px.getY();
+	    				d[ix][cy] = 0;
 	    				count--;
-	    				iy++;
+	    				cy++;
 	    			}
 
 	    		}
 	    		
-//	        	System.out.println("배열순서");
-//		        printQ(d);
 		        ix++;
 //	        	System.out.println("완료전 ix :"+ix);
 //	        	System.out.println("완료전 iy :"+iy);
 //	        	System.out.println("완료전 count"+count);
 	        	
         	}
-        	      		
+        	
+        	if(count==4) {
         	System.out.println(++ans + "번째 정답");
 	        printQ(d);
 			System.out.println("체스판초기화");
 	        clearQ(d);
-	        printQ(d);
+        	System.out.println("count 초기화 전"+count);
         	ix=0;
+        	iy++;
         	p.setX(ix);
         	p.setY(iy);
         	count=0;
         	System.out.println("clear후 ix :"+ix);
         	System.out.println("clear후 iy :"+iy);
-        	System.out.println("clear후 count"+count);
+        	System.out.println("count 초기화"+count);
         	System.out.println("pointx :"+p.getX());
         	System.out.println("pointy :"+p.getY());
+        	s.clear();
+          	}
         }
 	}
 		
@@ -206,11 +206,5 @@ public class EightQueen {
 		
 		SolveQueen(data);
 		
-//		for (int i=0; i< data.length; i++) {
-//			for (int j=0; j<data[0].length; j++) {
-//				System.out.print(" " + data[i][j]);
-//			}
-//			System.out.println();
-//		}
 	}
 }
