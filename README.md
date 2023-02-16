@@ -11,7 +11,7 @@
 + 0214 backtracking - recursive / stack (non-recursive)
   + `8-Queen` problem
     + Mystack, Point Class 이용 (non-recursive방법으로 구현)
-    + SolveQueen 메서드 작성중
+    + 4-Queen 먼저 test중. outofbound 디버깅 필요. d[0][y]=1 에서 작업 수행하지않고 바로 d[0][y+1]로 넘어가는듯.
 ------
 자바 자료구조 예제 (\example)
 + 0128 Chapter2 기본자료구조
