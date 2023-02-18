@@ -2,7 +2,7 @@ package Lec05;
 
 import Lec05.MyStack.EmptyMyStackException;
 
-public class EightQueenA {
+public class FourQueenA {
 
 //8  Queen 문제 풀기: 스택 사용하여 backtracking 코딩 실습
 //stack에 Point 객체를 생성하여 push, pop::(x, y, move) => move는 다음 이동 가능 candidate의 column임
@@ -34,63 +34,61 @@ public class EightQueenA {
         int ix = 0;					//초기행
         int iy = 0;					//초기열
         int ans = 0;				//정답갯수 카운트
-        int flag = 0;
         
         MyStack s = new MyStack(30) ; //스택 size
-        Point p = new Point(ix,iy);	  //초기포인트 p(0,0)
+        Point p = new Point(ix,iy); //초기포인트
     	        
-        d[ix][iy] = 1;
-        System.out.println("시작");
-        while (count < d.length) {        
-    		int cx = 1;
+        while (count <= d.length) {
+        	        	
+        	d[ix][iy] = 1;
+			System.out.println("============");
+
+        	System.out.println("첫while문의 ix : "+ ix);
+        	System.out.println("첫while문의 iy : "+ iy);
+        	System.out.println("첫while문의 d[ix][iy]=" + d[ix][iy]);
+
+        	s.push(p);
+        	System.out.println("point"+p);
+        	count++;
+        	System.out.println("count : "+count);
+    		
         	while (ix < d.length) {
+
         		int cy = 0;
-	    		while (cy < d.length) {	    			
-	    			cy = nextMove(d,cx,cy);	    			
-	    			if (cy != -1) {		
-	    				Point pc = new Point (cx, cy);
-	    				d[cx][cy] = 1;
+
+	    		while (cy < d.length) {
+	    			
+	    			cy = nextMove(d,ix,cy);
+	    			
+	    			if (cy != -1) {
+	    				
+	    				Point pc = new Point (ix, cy);
+	    				d[ix][cy] = 1;
 	    				s.push(pc);
 	    				count++;
-	    				cx++;
 	    				break;
 	    			}    			
-	    			else {	    					    				
+	    			else {
+	    				
 						Point px = null;
 						try {
 							px = s.pop();
 						} catch (EmptyMyStackException e) {
 							e.printStackTrace();
-						}						
-	    				cx = px.getX();
+						}
+						
+	    				ix = px.getX();
 	    				cy = px.getY();
-	    				d[cx][cy] = 0;
+	    				d[ix][cy] = 0;
 	    				count--;
-		    			cy++;
+	    				cy++;
 	    			}
+
 	    		}
 	    		
-//    			if(cy>=4) {
-//    	        	//여기서 iy=0 -> 1을 주고 돌려야 되는데...
-//    				if (!s.isEmpty()) {
-//    					try {
-//							p = s.pop();
-//						} catch (EmptyMyStackException e) {
-//							e.printStackTrace();
-//						}
-//    					ix = p.getX();
-//    					iy = p.getY();
-//    					d[ix][iy]=0;
-//    					ix=0; iy++;
-//    					p.setX(ix); p.setY(iy); count=0;
-//    				} else {
-//    					flag = 1;
-//    					break;
-//    				}
-//    			}
+		        ix++;
+	        	
         	}
-        	
-        	if (flag == 1) break;
         	
         	if(count==4) {
         	System.out.println(++ans + "번째 정답");
@@ -98,10 +96,17 @@ public class EightQueenA {
 			System.out.println("체스판초기화");
 	        clearQ(d);
         	System.out.println("count 초기화 전"+count);
-        	ix=0; iy++;
-        	p.setX(ix); p.setY(iy); count=0;
+        	ix=0;
+        	iy++;
+        	p.setX(ix);
+        	p.setY(iy);
+        	count=0;
+        	System.out.println("clear후 ix :"+ix);
+        	System.out.println("clear후 iy :"+iy);
+        	System.out.println("count 초기화"+count);
+        	System.out.println("pointx :"+p.getX());
+        	System.out.println("pointy :"+p.getY());
         	s.clear();
-        	break;
           	}
         }
 	}

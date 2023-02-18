@@ -42,7 +42,7 @@ public class Chap4_Test_Stack {
 		System.out.println("**Stack Test**");
 
 		Scanner stdIn = new Scanner(System.in);
-		genericStack s = new genericStack(8); // 최대 8 개를 push할 수 있는 stack
+		genericStack s = new genericStack(3); // 최대 8 개를 push할 수 있는 stack
 		Random random = new Random();
 		
 		int rndx = 0, rndy = 0;

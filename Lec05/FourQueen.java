@@ -2,7 +2,7 @@ package Lec05;
 
 import Lec05.MyStack.EmptyMyStackException;
 
-public class EightQueen {
+public class FourQueen {
 
 //8  Queen 문제 풀기: 스택 사용하여 backtracking 코딩 실습
 //stack에 Point 객체를 생성하여 push, pop::(x, y, move) => move는 다음 이동 가능 candidate의 column임
@@ -87,9 +87,6 @@ public class EightQueen {
 	    		}
 	    		
 		        ix++;
-//	        	System.out.println("완료전 ix :"+ix);
-//	        	System.out.println("완료전 iy :"+iy);
-//	        	System.out.println("완료전 count"+count);
 	        	
         	}
         	
@@ -141,7 +138,7 @@ public class EightQueen {
 	static boolean checkCol(int [][] d, int y) {
 		
 		//d의 행의 갯수 d.length 만큼 반복
-		for(int i=0; i < d.length; i++) {
+		for(int i=0; i < y; i++) {
 			if(d[i][y] == 1) return false;
 		}
 		
