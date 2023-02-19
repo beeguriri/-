@@ -30,11 +30,7 @@ public class EightQueenR {
 		System.out.println();
 	}
 	
-	void solveQ() {
-		searchQ(0);
-	}
-	
-	void searchQ(int row) {
+	void solveQ(int row) {
 		
 		if(row == size) {
 			printQ();
@@ -44,7 +40,7 @@ public class EightQueenR {
 		for (int col = 0; col < size; col++) {
 			if(isSafe(row,col)) {
 				board[row][col]=1;
-				searchQ(row+1);
+				solveQ(row+1);
 				board[row][col]=0;
 			}
 		}
@@ -77,7 +73,7 @@ public class EightQueenR {
 	public static void main(String[] args) {
 	
 		EightQueenR ans = new EightQueenR(8);
-		ans.solveQ();
+		ans.solveQ(0);
 	}
 
 }

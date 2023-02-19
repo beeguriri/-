@@ -5,11 +5,12 @@ public class QueenA {
 	//기본가정 : 같은 열에는 퀸을 놓지 않는다!
 	//n=4일때 생각
 	//i는 열, j는 행
-	static int [] pos = new int [4]; //체스판의 크기, 퀸의 갯수
+	static int size = 8;
+	static int [] pos = new int [size]; //체스판의 크기, 퀸의 갯수
 	static int count = 0;			 //정답횟수 세기
 	
 	static void print () {
-		for(int i=0; i<4; i++) {
+		for(int i=0; i<size; i++) {
 			System.out.printf("%2d", pos[i]);
 		}
 		
@@ -43,7 +44,7 @@ public class QueenA {
 	//i번째열에 퀸 배치
 	static void setQueen (int i) {
 		
-		if(i==4) {
+		if(i==size) {
 			
 			++count;
 			System.out.printf("%3d번째 답 : ", count);
@@ -51,7 +52,7 @@ public class QueenA {
 			return;
 		}
 		
-		for (int j = 0; j < 4; j++) {
+		for (int j = 0; j < size; j++) {
 			
 			pos[i] = j;
 			
