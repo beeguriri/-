@@ -22,7 +22,9 @@
       + 스택 사이즈가 퀸 배열 사이즈와 같으면 정답 출력
     + EightQueenB : Backtracking 연습 (non-recursion으로 구현)
       + 최초 정답 하나만 출력,. while loop 수정 중
-    + EightQueenR : recursion으로 구현, 8퀸 정답 92개 출력 
+    + `EightQueenB_Allsolution` : Backtracking 연습 (non-recursion으로 구현)
+      + 정답갯수 92개 이후 반복찍힘현상, while loop 조건 수정 필요...
+    + EightQueenR : recursion으로 구현, 8퀸 정답 92개 출력
       
 ##
 자바 자료구조 예제 (\example)
