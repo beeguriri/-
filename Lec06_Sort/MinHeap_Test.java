@@ -1,17 +1,26 @@
 package Lec06_Sort;
 
-//교수님자료(maxheap)
-//힙의 핵심은 insert와 delete!
-//제출은 minheap으로 할 것~!
-
 import java.util.Scanner;
 
-public class HeapSortCPP {
+class Element {
+	public int key;
+
+	public int getElement() {
+		return key;
+	}
+
+	public Element(int key) {
+		this.key = key;
+	}
+}
+
+public class MinHeap_Test {
+
 	public static void main(String[] args) {
 		
 		int select = 0;
 		Scanner stdIn = new Scanner(System.in);
-		MaxHeap heap = new MaxHeap(20);			//힙 사이즈 생성자
+		MinHeap heap = new MinHeap(10);			//힙 사이즈 생성자
 		Element ele = null;
 		final int count = 5;
 	    int[] x = new int[count];
@@ -37,7 +46,7 @@ public class HeapSortCPP {
 				
 			//delete	
 			case 3:
-				deletedEle = heap.DeleteMax(ele);
+				deletedEle = heap.DeleteMin(ele);
 				if (deletedEle != null) {
 					System.out.println("deleted element: " + deletedEle.key);
 				}
@@ -48,7 +57,7 @@ public class HeapSortCPP {
 			//sort
 			case 4:
 				for (int j = 0; j < count; j++) {
-					deletedEle = heap.DeleteMax(ele);
+					deletedEle = heap.DeleteMin(ele);
 					x[j] = deletedEle.getElement();
 				}
 				for (int num: x)
@@ -62,4 +71,5 @@ public class HeapSortCPP {
 
 		return;
 	}
+
 }
