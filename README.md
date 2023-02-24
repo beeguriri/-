@@ -60,9 +60,15 @@
 + Lec06 : 여러가지 정렬
 + Lec06_Sort : plato 과제
   + QuickSort : 피벗정렬 (Point, stack 이용)
+    + 인덱스 중간값을 피벗으로 잡고, 
+    + 피벗보다 작으면 왼쪽, 크면 오른쪽으로 배열 나누기
   + MergeSortObject : 객체의 병합정렬
     + PhyscExamSort : compareTo() override 
-  + HeapSort : 작성중
+  + MinHeap, MinHeap_Test : 힙정렬
+    + MaxHeap, HeapSortCPP : 교수님 자료 참고
+    + MinHeap의 경우
+      + Insert : 배열의 제일 마지막에 배치 후 위쪽으로 올라가면서 비교, 교환
+      + Delete : 배열의 제일 처음값(최소값) 제거, 배열의 제일 마지막값을 root로 옮긴 후 내려가면서 비교, 교환
       
 ##
 자바 자료구조 예제 (\example)
