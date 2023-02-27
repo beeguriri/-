@@ -53,7 +53,7 @@ class LinkedList {
 	
 	public void Show() { //전체 리스트를 순서대로 출력한다.
 
-		Node p = first, q=null;
+		Node p = first;
 		
 		if(first==null)	System.out.println("출력할 데이터가 없습니다.");
 		
@@ -122,7 +122,7 @@ class LinkedList {
 	}
 }
 
-public class Chap8_Test_SimpleList {
+public class SimpleList {
 
 	enum Menu {
 		
