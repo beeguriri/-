@@ -29,13 +29,12 @@ class LinkedList {
 		
 		Node p = first, q=null;
 		
+		if(first==null)	System.out.println("삭제할 데이터가 없습니다.");
+
 		//first = newNode (비어있지않으면)
 		while (p != null) {
-			
-			q = p;
-			p = p.link;
-			
-			if(q.data==element) {
+						
+			if(p.data==element) {
 				
 				if(q==null) first = p.link;
 				else q.link = p.link;
@@ -47,8 +46,6 @@ class LinkedList {
 				q = p;
 				p = p.link;
 			}
-				
-//			return true;	
 		}
 			
 		return false;
@@ -58,13 +55,13 @@ class LinkedList {
 
 		Node p = first, q=null;
 		
+		if(first==null)	System.out.println("출력할 데이터가 없습니다.");
+		
 		while ( p != null) {
-//			
-//			q = p;
-//			p = p.link;
+
 			System.out.println(p.data);
 			p = p.link;
-			if (p==null) break;
+			if (p==null)	break;	
 		}
 	}
 	
@@ -181,36 +178,37 @@ public class Chap8_Test_SimpleList {
 		System.out.println("inserted");
 		
 		l.Show();		
+		
 	      do {
 	          switch (menu = SelectMenu()) {	             
 	          
-	           case Add :                           // 머리노드 삽입
+	           case Add :                           // 노드 삽입
 	  	         double d = Math.random();
 	  	         data = (int) (d * 50);
 	  	         l.Add(data);            
 	  	         System.out.println("입력데이터 : " + data);
 	             break;
 	             
-	           case Delete :                          // 머리 노드 삭제
+	           case Delete :                          // 노드 삭제
+	        	 System.out.println("삭제 할 데이터를 입력하세요 : ");
 	          	 int num = sc.nextInt(); 
 	          	 boolean result = l.Delete(num);
 	          	 if (result)	System.out.println("삭제된 데이터는 " + num); 
-	          	 else 	System.out.println("데이터없음"); 
 	             break;
 	             
-	           case Show :                           // 꼬리 노드 삭제
-	                  l.Show();
-	 	  	         System.out.println("출력");
-	                  break;
+	           case Show :                           // 노드 출력
+	        	 l.Show();
+	  	         break;
 	                  
-//	           case Search :                           // 회원 번호 검색
-//	       		int n = sc.nextInt();
-//	              boolean result = l.search(n);
-//	                  if (result == false)
-//	                      System.out.println("검색 값 = " + n + "데이터가 없습니다.");
-//	                  else
-//	                      System.out.println("검색 값 = " + n + "데이터가 존재합니다.");
-//	                   break;
+	           case Search :                           // 노드 검색
+	  	         System.out.println("검색 할 데이터를 입력하세요 : ");
+	  	         int n = sc.nextInt();
+	             boolean result1 = l.Search(n);
+	             if (result1 == false)
+                      System.out.println("검색 값 = " + n + ": 데이터가 없습니다.");
+                 else
+                      System.out.println("검색 값 = " + n + " : 데이터가 존재합니다.");
+                 break;
 	                   
 	           case Exit :                           // 꼬리 노드 삭제
 	                  break;
