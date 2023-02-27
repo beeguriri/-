@@ -63,13 +63,15 @@
     + 인덱스 중간값을 피벗으로 잡고, 
     + 피벗보다 작으면 왼쪽, 크면 오른쪽으로 배열 나누기
   + MergeSortObject : 객체의 병합정렬
-    + PhyscExamSort : compareTo() override 
-  + MinHeap, MinHeap_Test : 힙정렬
+    + compareTo() override 
+  + MinHeap : 힙정렬(Min Priority)
     + MaxHeap, HeapSortCPP : 교수님 자료 참고
     + MinHeap의 경우
       + Insert : 배열의 제일 마지막에 배치 후 위쪽으로 올라가면서 비교, 교환
       + Delete : 배열의 제일 처음값(최소값) 제거, 배열의 제일 마지막값을 root로 옮긴 후 내려가면서 비교, 교환
-      
++ Lec08 : List > Linked-List
+  + SimpleList : 정수형 Linked-List 삽입/삭제/출력/검색 구현
+
 ##
 자바 자료구조 예제 (\example)
 + 0128 Chapter2 기본자료구조
