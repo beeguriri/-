@@ -163,7 +163,7 @@ public class SimpleList {
           }
           System.out.print(" : ");
           key = sc.nextInt();
-      } while (//key < Menu.Insert.ordinal() || 
+      } while (key < Menu.Add.ordinal() || 
                                           key > Menu.Exit.ordinal());
       return Menu.MenuAt(key);
   }
