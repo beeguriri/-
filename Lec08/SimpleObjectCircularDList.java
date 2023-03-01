@@ -43,16 +43,47 @@ class DoubledLinkedList2 {
 		return first.rlink == first;
 	}
 
-// --- 노드를 검색 ---//
-	public SimpleObject search(SimpleObject obj, Comparator<? super SimpleObject> c) {
+// --- 노드를 검색 (번호로 검색) ---//
+	public SimpleObject searchNo(SimpleObject obj, Comparator<? super SimpleObject> c) {
 		Node2 ptr = first.rlink; // 현재 스캔 중인 노드
 
+		while(ptr.data != null) {
+			
+			if(c.compare(ptr.data, obj) == 0)	return ptr.data;
+			
+			ptr = ptr.rlink;
+		}
+		
 		return null;
 	}
+	
+// --- 노드를 검색 (이름으로 검색) ---//
+		public SimpleObject searchName(SimpleObject obj, Comparator<? super SimpleObject> c) {
+			Node2 ptr = first.rlink; // 현재 스캔 중인 노드
+
+			while(ptr.data != null) {
+				
+				if(c.compare(ptr.data, obj) == 0)	return ptr.data;
+				
+				ptr = ptr.rlink;
+			}
+			
+			return null;
+		}
 
 // --- 전체 노드 표시 ---//
 	public void show() {
-
+		
+		Node2 ptr = first;
+		
+		if(ptr.rlink.data == null)	System.out.println("출력할 데이터가 없습니다.");
+		
+		while(ptr.rlink != first) {
+			System.out.println(ptr.rlink.data);
+			ptr = ptr.rlink;
+			
+			if(ptr.rlink.data == null)	break;
+		}
 	}
 
 // --- 올림차순으로 정렬이 되도록 insert ---//
@@ -60,47 +91,144 @@ class DoubledLinkedList2 {
 		Node2 temp = new Node2(obj);
 		Node2 ptr = first;
 		
-		while(ptr != null) {
+		//DoubledLinkedList2 생성자 호출 시 first = new Node2();		
+		// 비어있는 리스트에 처음 삽입
+		if(ptr.rlink.data == null) {
 			
-			if(c.compare(ptr.data, obj)>0) {
+			//ptr.rlink == first (?)
+			
+			ptr.rlink = temp;
+			temp.llink = ptr;
+			
+			ptr.llink = temp;
+			temp.rlink = ptr;		
+			
+		} else {
+		
+			while(ptr.rlink != first) {
 				
-				// 중간에 데이터 입력
-				temp.llink = ptr;
-				ptr.rlink = temp;
+				if(c.compare(ptr.rlink.data, obj)>0) {
+					
+					//데이터 삽입
+					//원래 ptr 오른쪽 노드에 있던걸 처리해줘야 순서 안꼬임
+					ptr.rlink.llink = temp;
+					temp.rlink = ptr.rlink;
 
-				temp.rlink = ptr.rlink;
-				ptr.rlink.llink = temp;
-				
-				break;
-				
-			} else {
-				
-				
+					ptr.rlink = temp;
+					temp.llink = ptr;
+					
+					break;
+					
+				} else 	ptr = ptr.rlink;	//ptr 위치 증가
 			}
 			
-			
-		}
-		
+			//제일 마지막에 노드 추가할 경우
+			if(ptr.rlink == first) {
 
+				ptr.rlink = temp;
+				temp.llink = ptr;
+				
+				temp.rlink = first;
+				first.llink = temp;
+			}
+		}
 	}
 
 // --- list에 삭제할 데이터가 있으면 해당 노드를 삭제 ---//
-	public void delete(SimpleObject obj, Comparator<? super SimpleObject> c) {
+	public SimpleObject delete(SimpleObject obj, Comparator<? super SimpleObject> c) {
 
+		Node2 ptr = first;
+		
+		if(ptr.rlink == first)	System.out.println("삭제할 데이터가 없습니다.");
+		
+		while (ptr.rlink != first) {
+			
+			if(c.compare(ptr.rlink.data, obj) == 0) {
+				
+				SimpleObject temp = ptr.rlink.data;
+				
+				ptr.rlink.rlink.llink = ptr;
+				ptr.rlink = ptr.rlink.rlink;
+				
+				return temp;
+				
+			} else ptr = ptr.rlink;
+		}
+		return null;
 	}
 	
-	public DoubledLinkedList2 merge(DoubledLinkedList2 lst2) {
+	//list1과 list2 병합
+	public DoubledLinkedList2 merge(DoubledLinkedList2 lst2, Comparator<? super SimpleObject> c) {
 		DoubledLinkedList2 lst3 = new DoubledLinkedList2();
+		
+		//ai : list1의 pointer, bi : list2의 pointer
 		Node2 ai = this.first.rlink, bi = lst2.first.rlink;
+		
+		//비교 확인
+		while(ai != first && bi != first) {
+			
+			if(c.compare(ai.data, bi.data)>0) {
+				//list2 데이터 삽입 후 list2 pointer 이동
+				
+				lst3.add(bi.data, SimpleObject.NO_ORDER);
+				bi = bi.rlink;
+				
+			} else if (c.compare(ai.data, bi.data) < 0) {
+				//list1 데이터 삽입 후 list1 pointer 이동
+				
+				lst3.add(ai.data, SimpleObject.NO_ORDER);
+				ai = ai.rlink;
+						
+			} else {
+				
+				//no order가 같을경우, name order로 비교
+				lst3.add(ai.data, SimpleObject.NAME_ORDER);
+				lst3.add(bi.data, SimpleObject.NAME_ORDER);
+				ai = ai.rlink;
+				bi = bi.rlink;	
+				
+			}
+		}
+		
+		//남은 노드 넣기
+		//비교할 값이 없으므로 nullpoint error => 비교없이 추가하는 함수 만들기
+		while(ai != first) {
+			lst3.mergeAdd(ai.data);
+			ai = ai.rlink;
+			
+			if(ai.data == null)	break;
+		}
+		
+		while (bi != first) {
+			lst3.mergeAdd(bi.data);
+			bi = bi.rlink;
+			
+			if(bi.data == null)	break;
+		}
+		
 		return lst3;
 	}
+	
+	//merge용 데이터 추가 (비교필요없음)
+	public void mergeAdd(SimpleObject obj) {
+		
+		Node2 temp = new Node2(obj);
+		Node2 ptr = first.llink;			//list3의 제일 마지막 노드에 넣어주므로
+	
+		ptr.rlink = temp;
+		temp.llink = ptr;
+		
+		temp.rlink = first;
+		first.llink = temp;
+	}
+	
 }
 
 
 public class SimpleObjectCircularDList {
 
 	enum Menu {
-		Add("삽입"), Delete("삭제"), Show("인쇄"), Search("검색"), Merge("병합"), Exit("종료");
+		Add("List1 삽입"), Add2("List2 삽입"), Delete("List1 삭제"), Delete2("List2 삭제"), Show("인쇄"), SearchNo("번호검색"), SearchName("이름검색"), Merge("병합"), Exit("종료");
 
 		private final String message; // 표시할 문자열
 
@@ -140,12 +268,17 @@ public class SimpleObjectCircularDList {
 		Menu menu; // 메뉴
 		System.out.println("Linked List2");
 		DoubledLinkedList2 lst1 = new DoubledLinkedList2();
+		DoubledLinkedList2 lst2 = new DoubledLinkedList2();
+		DoubledLinkedList2 lst3 = null;
+
 		String sno1 = null, sname1 = null;
+		Scanner sc = new Scanner(System.in);
+		
 		do {
 			switch (menu = SelectMenu()) {
 			
-			case Add: // 머리노드 삽입
-				Scanner sc = new Scanner(System.in);
+			case Add: // 노드 삽입
+				System.out.println("===== List1 Data 입력 =====");
 				System.out.println(" 회원번호: ");
 				sno1 = sc.next();
 				System.out.println(" 회원이름: ");
@@ -154,29 +287,75 @@ public class SimpleObjectCircularDList {
 				lst1.add(so, SimpleObject.NO_ORDER);
 				break;
 				
-			case Delete: // 머리 노드 삭제
-				Scanner sc2 = new Scanner(System.in);
+			case Add2: // 노드 삽입
+				System.out.println("===== List2 Data 입력 =====");
 				System.out.println(" 회원번호: ");
-				sno1 = sc2.next();
+				sno1 = sc.next();
 				System.out.println(" 회원이름: ");
-				sname1 = sc2.next();
-				SimpleObject so2 = new SimpleObject(sno1, sname1);
-				lst1.delete(so2, SimpleObject.NO_ORDER);
+				sname1 = sc.next();
+				SimpleObject so1 = new SimpleObject(sno1, sname1);
+				lst2.add(so1, SimpleObject.NO_ORDER);
 				break;
 				
-			case Show: // 꼬리 노드 삭제
-				//l.Show();
+			case Delete: // 노드 삭제
+				System.out.println(" 회원번호: ");
+				sno1 = sc.next();
+				SimpleObject so2 = new SimpleObject(sno1);
+				System.out.println("삭제된 데이터 : " + lst1.delete(so2, SimpleObject.NO_ORDER));
 				break;
 				
-			case Search: // 회원 번호 검색
-/*
-				//boolean result = l.search(n);
-				if (result == false)
-					System.out.println("검색 값 = " + n + "데이터가 없습니다.");
-				else
-					System.out.println("검색 값 = " + n + "데이터가 존재합니다.");
+			case Delete2: // 노드 삭제
+				System.out.println(" 회원번호: ");
+				sno1 = sc.next();
+				SimpleObject so3 = new SimpleObject(sno1);
+				System.out.println("삭제된 데이터 : " + lst2.delete(so3, SimpleObject.NO_ORDER));
 				break;
-				*/
+				
+			case Show: // 리스트 출력
+				System.out.println("===== List1 Data 출력 =====");
+				lst1.show();
+				System.out.println("===== List2 Data 출력 =====");
+				lst2.show();
+				break;
+				
+			case SearchNo: // 회원 번호 검색
+
+				System.out.println(" 회원번호: ");
+				sno1 = sc.next();
+				
+				SimpleObject so4 = new SimpleObject(sno1);
+				SimpleObject result1 = lst1.searchNo(so4, SimpleObject.NO_ORDER);
+				SimpleObject result2 = lst2.searchNo(so4, SimpleObject.NO_ORDER);
+				
+				if (result1 != null || result2 != null)	{		
+					System.out.println("List1 데이터 : " + result1);
+					System.out.println("List2 데이터 : " + result2);
+				}
+				else	System.out.println("데이터 없음");
+				break;				
+				
+			case SearchName: // 회원 이름 검색
+
+				System.out.println(" 회원번호: ");
+				sno1 = sc.next();
+				
+				SimpleObject so5 = new SimpleObject(sno1);
+				SimpleObject result3 = lst1.searchName(so5, SimpleObject.NAME_ORDER);
+				SimpleObject result4 = lst2.searchName(so5, SimpleObject.NAME_ORDER);
+
+				if (result3 != null || result4 != null)	{		
+					System.out.println("List1 데이터 : " + result3);
+					System.out.println("List2 데이터 : " + result4);
+				}
+				else	System.out.println("데이터 없음");
+				break;			
+				
+			case Merge: // 병합
+				
+				System.out.println("===== List1과 List2 병합 =====");
+				lst3 = lst1.merge(lst2, SimpleObject.NO_ORDER);
+				lst3.show();
+				break;	
 				
 			case Exit: // 꼬리 노드 삭제
 				break;

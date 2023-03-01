@@ -52,8 +52,10 @@ class SimpleObject {
 		public int compare(SimpleObject d1, SimpleObject d2) {
 			
 			// no를 string으로 입력받았으나, 연산자 사용하기 위해 int로 타입변환
-			return (Integer.parseInt(d1.no) > Integer.parseInt(d2.no)) ? 1 
-					: (Integer.parseInt(d1.no) < Integer.parseInt(d2.no)) ? -1 : 0;
+//			return (Integer.parseInt(d1.no) > Integer.parseInt(d2.no)) ? 1 
+//					: (Integer.parseInt(d1.no) < Integer.parseInt(d2.no)) ? -1 : 0;
+			
+				return d1.no.compareTo(d2.no);
 		}
 	}
 
