@@ -71,6 +71,8 @@
       + Delete : 배열의 제일 처음값(최소값) 제거, 배열의 제일 마지막값을 root로 옮긴 후 내려가면서 비교, 교환
 + Lec08 : List > Linked-List
   + SimpleList : 정수형 Linked-List 삽입/삭제/출력/검색 구현
+  + SimpleObjectList : Object Type의 Linked-List 삽입/삭제/출력/검색 구현
+  + SimpleObjectCircularDList : Object Type의 Circular-Doubly-Linked-List 삽입/삭제/출력/검색/병합 구현
 
 ##
 자바 자료구조 예제 (\example)
