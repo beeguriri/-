@@ -30,28 +30,12 @@ class Tree {
 	
 	TreeNode inorderSucc(TreeNode current) {
 		
-		TreeNode parent = current;			//현재노드를 부모노드로 설정
 		TreeNode temp = current.RightChild;	//현재노드의 오른쪽 탐색
 		
-		
-		//if (current.RightChild != null) {
-		
-			//자식노드 왼쪽이 비어있으면
-			//오른쪽으로 내려와서 다시 왼쪽으로 탐색
-			if(temp.LeftChild == null) {
-				parent.RightChild = temp.RightChild;
-				
-				if(parent.RightChild != null)
-					parent.RightChild.parent = parent;
-			}
-			
-			
-			while (temp.LeftChild != null) {
-				parent = temp;
+		if (current.RightChild != null)
+			while (temp.LeftChild != null)
 				temp = temp.LeftChild;
-			}
-	//	}
-				
+		
 		return temp;
 	}
 	
@@ -73,7 +57,7 @@ class Tree {
 	}
 	
 	// 탐색순서 : TL -> x -> TR
-	private void inorder(TreeNode CurrentNode) {	
+	private void inorder(TreeNode CurrentNode) {			
 		if (CurrentNode != null) {
 			inorder(CurrentNode.LeftChild);	//왼쪽노드 탐색
 			System.out.print(" " + CurrentNode.data);	//x노드 출력
@@ -131,41 +115,73 @@ class Tree {
 	
 	boolean delete(int num) {
 		TreeNode p = root, q = null;
-		int branchMode = 0; //1은 left, 2는 right
-	 
-		//inorderSucc 기존위치가 리프노드인지 아닌지 판별 => isLeafNode 
-		//리프노드 이면 삭제 쉬움 
+		//int branchMode = 0; //1은 left, 2는 right
+	 		
+		//데이터 탐색 : pointer 이동
+		while(p != null && p.data != num) {
+			q = p;
+			if(num < p.data)	p = p.LeftChild;
+			else	p = p.RightChild;
+		}
 		
-		//삭제할 노드에 inorderSucc 넣고
-		while(p!=null) {
+		//찾는 데이터 없음
+		if(p==null) 			return false;
+		
+		//삭제할 노드가 리프노드인 경우
+		if(p.LeftChild == null && p.RightChild == null) {
 			
-			if(p.data==num)	{
-				TreeNode temp = null;
-				temp = inorderSucc(p);
-				
-				//리프노드면 삭제
-				if(isLeafNode(p)) {
-					
-				}
-				
-				//리프노드 아니면?
-					
-				
+			//root만 남아서 삭제할때 null point error
+			if (p!=root) {
+				if(q.LeftChild == p)	q.LeftChild = null;
+				else					q.RightChild = null;
 			}
-			else {
-				if(num < p.data) {
-					q = p;
-					p = p.LeftChild;
+			else	root = null;
+		}
+		
+		//삭제할 노드가 리프노드가 아닌경우
+		//자식노드가 두개인 경우
+		else if (p.LeftChild != null && p.RightChild != null) {
+
+			//inorderSucc의 값을 삭제할 위치에 넣어주고
+			TreeNode temp = inorderSucc(p);
+			int tempData = temp.data;
+			
+			//inorderSucc의 기존노드는 삭제하고
+			delete(tempData);
+			
+			//삭제할 노드의 데이터만 대체
+			p.data = tempData;
+
+		}
+		
+		//자식노드가 한개
+		else {
+			
+			//root에 자식노드 하나만 있을때 root 삭제할경우 null point error
+			if (p!=root) {
+				if(q.LeftChild==p)	{
+					if(p.LeftChild!=null)	q.LeftChild = p.LeftChild;
+					else 					q.LeftChild = p.RightChild;
 				} else {
-					q = p;
-					p = p.RightChild;
+					if(p.LeftChild!=null)	q.RightChild = p.LeftChild;
+					else					q.RightChild = p.RightChild;
 				}
+			} else {
+				
+				TreeNode temp = inorderSucc(p);
+				int tempData = temp.data;
+				
+				//inorderSucc의 기존노드는 삭제하고
+				delete(tempData);
+				
+				//삭제할 노드의 데이터만 대체
+				p.data = tempData;
+				
 			}
-			
-			return true;
+
 		}
 	
-		return false;
+		return true;
 		
 	}
 	
@@ -173,6 +189,11 @@ class Tree {
 
 		TreeNode p = root;
 		TreeNode q = null;
+		
+		if(p==null)	{
+			System.out.println("BinaryTree가 비어있습니다.");
+			return false;
+		}
 		
 		while(p!=null) {
 			
@@ -248,9 +269,9 @@ public class BinaryTree_int {
 						double d = Math.random();
 						input[ix] = (int) (d * 30);
 					}
-					//int [] input = {15, 20, 5, 17, 33};
-					//int [] input = {33, 27, 5, 40, 25, 66, 35, 34};
-					//count = input.length;
+//					int [] input = {15, 20, 5, 17, 33};
+//					int [] input = {33, 27, 5, 40, 25, 66, 35, 34};
+//					count = input.length;
 					for (int i = 0; i < count; i++) {
 						if (t.insert(input[i]) == false)
 							System.out.println("Insert Duplicated data");
@@ -260,8 +281,13 @@ public class BinaryTree_int {
 	          case Delete :           // 노드 삭제 - 어렵다: 난이도 상
 	        	    System.out.println("삭제할 데이터:: ");
 	        	  	num = stdIn.nextInt();
-	                t.delete(num);
-	                  break;
+	                result = t.delete(num);
+	                if (result == true)
+		                     System.out.println(" 데이터를 삭제하였습니다");
+                  	else
+		                      System.out.println("삭제할 데이터가 없습니다.");
+
+                	break;
 
 	          case Search :           // 노드 검색
 	        	  	System.out.println("검색할 데이터:: ");
