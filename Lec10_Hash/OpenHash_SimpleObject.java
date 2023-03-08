@@ -106,7 +106,7 @@ class OpenHash<V> {
 		Bucket<V> p = table[hash]; // 주목 버킷
 		for (int i = 0; i < size; i++) {
 			if (p.stat == Status.EMPTY || p.stat == Status.DELETED) {
-				p.set(key, data, Status.OCCUPIED);
+//				p.set(key, data, Status.OCCUPIED);
 				return 0;
 			}
 			hash = rehashValue(hash); // 재해시
@@ -149,7 +149,7 @@ class OpenHash<V> {
 public class OpenHash_SimpleObject {
 	
 	static Scanner stdIn = new Scanner(System.in);
-	
+
 	//--- 메뉴 열거형 ---//
 	enum Menu {
 		ADD("추가"), REMOVE("삭제"), SEARCH("검색"), DUMP("표시"), TERMINATE("종료");
@@ -187,17 +187,30 @@ public class OpenHash_SimpleObject {
 
 	public static void main(String[] args) {
 
+
 		Menu menu; // 메뉴
 		SimpleObject2 data; // 추가용 데이터 참조
-		SimpleObject2 temp = new SimpleObject2(); // 읽어 들일 데이터
+		SimpleObject2 temp; // 읽어 들일 데이터
 
 		OpenHash<SimpleObject2> hash = new OpenHash<SimpleObject2>(13);
+		
 		do {
 			switch (menu = SelectMenu()) {
 			case ADD: // 추가
-				data = new SimpleObject2();
-				data.scanSimpleObject2("추가", SimpleObject2.NO | SimpleObject2.NAME);
-				int k = hash.add(data, SimpleObject2.NO_ORDER);
+				
+				String sno = null;
+				String sname = null;
+				
+				System.out.println("입력 데이터(sno, sname):: ");
+                System.out.print("번호: ");
+                sno = stdIn.next();
+                System.out.print("이름: ");
+                sname = stdIn.next();
+				
+				data = new SimpleObject2(sno, sname);
+				
+//				int k = hash.add(data, SimpleObject2.NO_ORDER);
+				int k = 0;
 				switch (k) {
 				case 1:
 					System.out.println("그 키값은 이미 등록되어 있습니다.");
@@ -209,17 +222,17 @@ public class OpenHash_SimpleObject {
 				break;
 
 			case REMOVE: // 삭제
-				temp.scanSimpleObject2("삭제", SimpleObject2.NO);
-				hash.remove(temp, SimpleObject2.NO_ORDER);
+//				temp.scanSimpleObject2("삭제", SimpleObject2.NO);
+//				hash.remove(temp, SimpleObject2.NO_ORDER);
 				break;
 
 			case SEARCH: // 검색
-				temp.scanSimpleObject2("검색", SimpleObject2.NO);
-				SimpleObject2 t = hash.search(temp, SimpleObject2.NO_ORDER);
-				if (t != null)
-					System.out.println("그 키를 갖는 데이터는 " + t + "입니다.");
-				else
-					System.out.println("해당 데이터가 없습니다.");
+//				temp.scanSimpleObject2("검색", SimpleObject2.NO);
+//				SimpleObject2 t = hash.search(temp, SimpleObject2.NO_ORDER);
+//				if (t != null)
+//					System.out.println("그 키를 갖는 데이터는 " + t + "입니다.");
+//				else
+//					System.out.println("해당 데이터가 없습니다.");
 				break;
 
 			case DUMP: // 표시
