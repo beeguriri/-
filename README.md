@@ -75,6 +75,10 @@
   + SimpleObjectCircularDList : Object Type의 Circular-Doubly-Linked-List 삽입/삭제/출력/검색/병합 구현
 + Lec09 : Tree > Binary Tree
   + BinaryTree_int : 정수형 Binary Tree의 삽입/삭제/출력/검색 구현
++ Lec10 : Hash
+  + Chain Hash : Hashing한 key link로 저장
+  + Open Hash : Hashing, Rehashing
++ Lec10_Hash : Object Type (Plato과제)
 
 ##
 자바 자료구조 예제 (\example)
