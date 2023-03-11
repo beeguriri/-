@@ -64,8 +64,8 @@ class OpenHash<V> {
 	}
 
 	// --- 해시값을 구함 ---//
-	public int hashValue(SimpleObject2 key) {
-		 int num = Integer.parseInt(key.sno);
+	public int hashValue(SimpleObject2 data) {
+		 int num = Integer.parseInt(data.sno);
 	     return num % 10;
 	}
 
@@ -75,12 +75,12 @@ class OpenHash<V> {
 	}
 
 	// --- 키값 key를 갖는 버킷 검색 ---//
-	private Bucket<V> searchNode(SimpleObject2 key) {
+	private Bucket<V> searchNode(SimpleObject2 key, Comparator<? super SimpleObject2> c) {
 		int hash = hashValue(key); // 검색할 데이터의 해시값
 		Bucket<V> p = table[hash]; // 주목 버킷
 
 		for (int i = 0; p.stat != Status.EMPTY && i < size; i++) {
-			if (p.stat == Status.OCCUPIED && String.valueOf(p.getKey(key)).equals(p.data))
+			if (p.stat == Status.OCCUPIED && c.compare((SimpleObject2)p.getValue(), key)==0)
 				return p;
 			hash = rehashValue(hash); // 재해시
 			p = table[hash];
@@ -89,8 +89,8 @@ class OpenHash<V> {
 	}
 
 	// --- 키값이 key인 요소를 검색(데이터를 반환)---//
-	public V search(SimpleObject2 key) {
-		Bucket<V> p = searchNode(key);
+	public V search(SimpleObject2 key, Comparator<? super SimpleObject2> c) {
+		Bucket<V> p = searchNode(key, c);
 		if (p != null)
 			return p.getValue();
 		else
@@ -98,15 +98,17 @@ class OpenHash<V> {
 	}
 
 	// --- 키값이 key인 데이터를 data의 요소로 추가 ---//
-	public int add(SimpleObject2 key) {
-		if (search(key) != null)
+	public int add(SimpleObject2 data, Comparator<? super SimpleObject2> c) {
+
+		int hash = hashValue(data); // 추가할 데이터의 해시값
+		Bucket<V> p = table[hash]; // 주목 버킷
+
+		if (search(data,c) != null)
 			return 1; // 키값이 이미 등록되어 있음
 
-		int hash = hashValue(key); // 추가할 데이터의 해시값
-		Bucket<V> p = table[hash]; // 주목 버킷
 		for (int i = 0; i < size; i++) {
 			if (p.stat == Status.EMPTY || p.stat == Status.DELETED) {
-//				p.set(key, data, Status.OCCUPIED);
+				p.set((V)data, Status.OCCUPIED);
 				return 0;
 			}
 			hash = rehashValue(hash); // 재해시
@@ -116,8 +118,8 @@ class OpenHash<V> {
 	}
 
 	// --- 키값이 key인 요소를 삭제 ---//
-	public int remove(SimpleObject2 key) {
-		Bucket<V> p = searchNode(key); // 주목 버킷
+	public int remove(SimpleObject2 key, Comparator<? super SimpleObject2> c) {
+		Bucket<V> p = searchNode(key, c); // 주목 버킷
 		if (p == null)
 			return 1; // 이 키값은 등록되어 있지 않음
 
@@ -131,7 +133,7 @@ class OpenHash<V> {
 			System.out.printf("%02d ", i);
 			switch (table[i].stat) {
 			case OCCUPIED:
-				System.out.printf("%s (%s)\n", table[i]);
+				System.out.println(String.valueOf(table[i].getValue()));
 				break;
 
 			case EMPTY:
@@ -164,10 +166,12 @@ public class OpenHash_SimpleObject {
 		}
 
 		Menu(String string) { // 생성자(constructor)
+
 			message = string;
 		}
 
 		String getMessage() { // 표시할 문자열을 반환
+
 			return message;
 		}
 	}
@@ -187,12 +191,11 @@ public class OpenHash_SimpleObject {
 
 	public static void main(String[] args) {
 
-
 		Menu menu; // 메뉴
 		SimpleObject2 data; // 추가용 데이터 참조
 		SimpleObject2 temp; // 읽어 들일 데이터
 
-		OpenHash<SimpleObject2> hash = new OpenHash<SimpleObject2>(13);
+		OpenHash<SimpleObject2> hash = new OpenHash<SimpleObject2>(10);
 		
 		do {
 			switch (menu = SelectMenu()) {
@@ -200,7 +203,6 @@ public class OpenHash_SimpleObject {
 				
 				String sno = null;
 				String sname = null;
-				
 				System.out.println("입력 데이터(sno, sname):: ");
                 System.out.print("번호: ");
                 sno = stdIn.next();
@@ -208,31 +210,34 @@ public class OpenHash_SimpleObject {
                 sname = stdIn.next();
 				
 				data = new SimpleObject2(sno, sname);
-				
-//				int k = hash.add(data, SimpleObject2.NO_ORDER);
-				int k = 0;
+				int k = hash.add(data, SimpleObject2.NO_ORDER);
 				switch (k) {
-				case 1:
-					System.out.println("그 키값은 이미 등록되어 있습니다.");
-					break;
-				case 2:
-					System.out.println("해시 테이블이 가득 찼습니다.");
-					break;
+					case 1:
+						System.out.println("그 키값은 이미 등록되어 있습니다.");
+						break;
+					case 2:
+						System.out.println("해시 테이블이 가득 찼습니다.");
+						break;
 				}
 				break;
 
 			case REMOVE: // 삭제
-//				temp.scanSimpleObject2("삭제", SimpleObject2.NO);
-//				hash.remove(temp, SimpleObject2.NO_ORDER);
+				System.out.println("삭제 데이터(sno):: ");
+				String sno2 = stdIn.next();
+				temp = new SimpleObject2(sno2, sno2);
+				hash.remove(temp, SimpleObject2.NO_ORDER);
 				break;
 
 			case SEARCH: // 검색
-//				temp.scanSimpleObject2("검색", SimpleObject2.NO);
-//				SimpleObject2 t = hash.search(temp, SimpleObject2.NO_ORDER);
-//				if (t != null)
-//					System.out.println("그 키를 갖는 데이터는 " + t + "입니다.");
-//				else
-//					System.out.println("해당 데이터가 없습니다.");
+				System.out.println("검색 데이터(sno):: ");
+				String sno1 = stdIn.next();
+				temp = new SimpleObject2(sno1, sno1);
+				SimpleObject2 t = hash.search(temp, SimpleObject2.NO_ORDER);
+
+				if (t != null)
+					System.out.println("그 키를 갖는 데이터는 " + t + "입니다.");
+				else
+					System.out.println("해당 데이터가 없습니다.");
 				break;
 
 			case DUMP: // 표시
